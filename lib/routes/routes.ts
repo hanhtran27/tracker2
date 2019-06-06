@@ -15,6 +15,9 @@ class Routes {
     public routes(app): void {
 
         //GOALS
+        app.route('/', (req, res) => {
+            res.sendStatus(200)
+        })
 
         app.route('/goals')
             //get all goals
