@@ -7,6 +7,10 @@ mongoose.set('useFindAndModify', false);
 
 export class GoalController {
 
+    public test(req: Request, res: Response) {
+        res.sendStatus(200);
+    }
+
     public addNewGoal(req: Request, res: Response) {
         let newGoal = new Goal(req.body);
 
