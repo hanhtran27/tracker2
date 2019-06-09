@@ -14,6 +14,7 @@ import { GoalComponent } from './components/goal/goal.component';
 import { GoalListComponent } from './components/goal-list/goal-list.component';
 import { GoalDetailsComponent } from './components/goal-details/goal-details.component';
 import { RecordComponent } from './components/record/record.component';
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -32,11 +33,13 @@ import { RecordComponent } from './components/record/record.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ChartsModule
   ],
   providers: [
     AuthGuard
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  
 })
 export class AppModule { }

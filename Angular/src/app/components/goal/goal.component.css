@@ -34,7 +34,7 @@
     color: black;
     max-height: 120px;
     min-width: 120px;
-    background-color:#b7d7e8;
+    background-color:#c0ded9;
     border-radius: 2px;
   }
 
@@ -44,7 +44,7 @@
     color: black;
     max-height: 120px;
     min-width: 120px;
-    background-color: #daebe8;
+    background-color: #b2c2bf;
     border-radius: 2px;
   }
 
@@ -54,14 +54,13 @@
     color: white;
     max-height: 120px;
     min-width: 120px;
-    background-color:#d96459;
+    background-color:#3b3a30;
     border-radius: 2px;
   }
 
   .module:hover {
-    background-color: #eee;
+    opacity: 0.7;
     cursor: pointer;
-    color: #607d8b;
   }
   .grid-pad {
     padding: 10px 0;

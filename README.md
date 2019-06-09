@@ -31,6 +31,11 @@ How to run backend server?
 2. "npm install"
 3. "node server.js", comiple first if necessary 
 
+How to run Angular with chart.js?
+
+1. npm install --save ng2-charts
+2. npm install --save chart.js
+
 how to run mocha tests?
 
 1. start backend server

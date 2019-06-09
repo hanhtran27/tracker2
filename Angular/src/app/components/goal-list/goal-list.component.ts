@@ -13,13 +13,13 @@ export class GoalListComponent implements OnInit {
 
   // inject goalService
   constructor(private goalService: GoalService) { }
-
+  
   ngOnInit() {
     // call goal service to get all goals
     this.goalService.getGoals()
       .subscribe(goalsResult => this.goals = goalsResult);
   }
-   
+
   // add a new goal
   addGoal(goalName: HTMLInputElement,
     tag: HTMLInputElement,
@@ -30,9 +30,12 @@ export class GoalListComponent implements OnInit {
 
     let newGoal = new Goal(goalName.value, tag.value, goalNumber.valueAsNumber, goalUnit.value, startDate.valueAsDate, dueDate.valueAsDate);
 
+    //validate inputs
+
+    //add goal
     this.goalService.addGoal(newGoal)
       .subscribe(goalResult => this.goals.push(goalResult));
-    
+
     goalName.value = "";
     tag.value = "";
     goalNumber.value = "";
@@ -41,7 +44,7 @@ export class GoalListComponent implements OnInit {
     dueDate.valueAsDate = "";
   }
 
-  
+
 }
 
 

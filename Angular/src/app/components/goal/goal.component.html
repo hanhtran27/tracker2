@@ -10,13 +10,12 @@
             <!--if completed-->
             <p *ngIf="finishedPercentage >= 100"> Completed &#9989;</p>
         </div>
-    </a>
-    <br>
-    <div class="progress" (ngInit)="getRecodsByGoalId(goal._id)">
-        <div class="progress-bar progress-bar-animated" [style.width]='progressBarWidth' attr.aria-valuenow=0
-            aria-valuemin=0 attr.aria-valuemax={{goal.goalNumber}}>{{progressBarWidth}}
+        <div class="progress" (ngInit)="getRecodsByGoalId(goal._id)">
+            <div class="progress-bar progress-bar-animated" [style.width]='progressBarWidth' attr.aria-valuenow=0
+                aria-valuemin=0 attr.aria-valuemax={{goal.goalNumber}}>{{progressBarWidth}}
+            </div>
         </div>
-    </div>
+    </a>
     <br>
     <button type="button" class="btn btn-info" data-toggle="modal" attr.data-target="#addRecordModal_{{goal._id}}">
         Add Record

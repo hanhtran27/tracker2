@@ -1,39 +1,57 @@
-<h6 class="card-header">Due Date: {{goal?.dueDate | date: 'shortDate'}}</h6>
-<div class="card-body">
-    <h5 class="card-title">{{ goal?.goalName }}</h5>
-    <p class="card-text">Tag: {{goal?.tag}}</p>
-    <p class="card-text">{{goal?.goalNumber}} {{goal?.goalUnit}}</p>
-    <p class="card-text">StartDate: {{goal?.startDate | date: 'shortDate'}}</p>
-    <p class="card-text">DueDate: {{goal?.dueDate | date: 'shortDate'}}</p>
-    <p class="card-text">GoalId: {{goal?._id }}</p>
-
-    <div class="progress">
-        <div class="progress-bar progress-bar-animated" [style.width]='finishedPercentage' attr.aria-valuenow=0
-            aria-valuemin=0 attr.aria-valuemax={{goal?.goalNumber}}>{{finishedPercentage}}
+<div style="background:transparent !important" class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <div class="container">
+            <div class="row">
+                <div class="col ">
+                    <h1 class="display-4">{{ goal?.goalName }}</h1>
+                    <p class="lead">Tag: {{goal?.tag}}</p>
+                    <p class="lead">StartDate: {{goal?.startDate | date: 'shortDate'}}</p>
+                    <p class="lead">DueDate: {{goal?.dueDate | date: 'shortDate'}}</p>
+                    <!--progress bar -->
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-animated" [style.width]='finishedPercentage'
+                            attr.aria-valuenow=0 aria-valuemin=0 attr.aria-valuemax={{goal?.goalNumber}}>
+                            {{finishedPercentage}}
+                        </div>
+                    </div>
+                    <br>
+                    <!-- delete goal/ edit goal buttons-->
+                    <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
+                        attr.data-target="#editModal_{{goal?._id}}">
+                        Edit Goal
+                    </button>
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal"
+                        attr.data-target="#deleteModal_{{goal?._id}}">
+                        Delete Goal
+                    </button>
+                    <button type="button" class="btn btn-outline-warning" data-toggle="modal"
+                        attr.data-target="#addRecordModal_{{goal?._id}}">
+                        Add Record
+                    </button>
+                </div>
+                <div class="col">
+                    <!-- bar chart -->
+                    <div>
+                        <div>
+                            <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels"
+                                [options]="barChartOptions" [plugins]="barChartPlugins" [legend]="barChartLegend"
+                                [chartType]="barChartType">
+                            </canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <br><br>
-
-
-    <button type="button" class="btn btn-danger" data-toggle="modal" attr.data-target="#deleteModal_{{goal?._id}}">
-        Delete Goal
-    </button>
-
-    <button type="button" class="btn btn-warning" data-toggle="modal" attr.data-target="#editModal_{{goal?._id}}">
-        Edit Goal
-    </button>
-
-    <app-record [records]="records" (deleteRecordClicked)="ngOnInit()" (updatRecordClicked)="ngOnInit()"></app-record>
-
-    <button type="button" class="btn btn-info" data-toggle="modal" attr.data-target="#addRecordModal_{{goal?._id}}">
-        Add Record
-    </button>
-
 </div>
 
+<!-- show record table-->
+<app-record [records]="records" (deleteRecordClicked)="ngOnInit()" (updatRecordClicked)="ngOnInit()">
+</app-record>
+
 <!-- Delete Goal Modal -->
-<div class="modal fade" id="deleteModal_{{goal?._id}}" tabindex="-1" role="dialog" aria-labelledby="deleteGoalModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="deleteModal_{{goal?._id}}" tabindex="-1" role="dialog"
+    aria-labelledby="deleteGoalModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -102,7 +120,7 @@
                             <div class="form-group">
                                 <label for="dueDateInput">Due Date</label>
                                 <input type="date" name="dueDate" #newdueDate class="form-control"
-                                value="{{goal?.dueDate | date:'yyyy-MM-dd'}}">
+                                    value="{{goal?.dueDate | date:'yyyy-MM-dd'}}">
                             </div>
                         </form>
                     </div>
