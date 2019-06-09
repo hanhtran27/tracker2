@@ -8,7 +8,7 @@
     </thead>
     <tbody>
         <tr *ngFor="let record of records">
-            <th>{{record.finishedDate | date: 'shortDate'}}</th>
+            <th>{{record.finishedDate | date: 'shortDate': 'UTC'}}</th>
             <th>{{record.finishedUnits }}</th>
             <th>
                 <button type="button" class="btn btn-outline-secondary" data-toggle="modal"

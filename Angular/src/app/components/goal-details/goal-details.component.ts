@@ -37,7 +37,7 @@ export class GoalDetailsComponent implements OnInit {
   public barChartLegend = true;
 
   public barChartData: ChartDataSets[] = [
-    { data: [] }
+    { data: [], backgroundColor: "#3b3a30", borderColor: "#3b3a30", hoverBackgroundColor:"#3b3a30" }
   ];
 
   constructor(
@@ -71,9 +71,8 @@ export class GoalDetailsComponent implements OnInit {
   getRecordsByGoalIdCallback(records: Record[]): void {
     this.calculateFinishedPercentage(this.goal, records)
 
-    //combine records
     let combined = this.comebineRecord(records);
-    this.barChartLabels = combined.map(a => a.date.toString());
+    this.barChartLabels = combined.map(a => a.date.toString().split("T")[0]);
 
     let data1 = combined.map(a => a.count);
     this.barChartData =
@@ -110,20 +109,22 @@ export class GoalDetailsComponent implements OnInit {
     var combinedRecord = new Map();
 
     for (let record of records) {
-      if (combinedRecord.has(record.finishedDate.toString())) {
-        combinedRecord.set(record.finishedDate.toString(), record.finishedUnits.valueOf() + combinedRecord.get(record.finishedDate.toString()));
+      if (combinedRecord.has(record.finishedDate)) {
+        combinedRecord.set(record.finishedDate, record.finishedUnits.valueOf() + combinedRecord.get(record.finishedDate.toString()));
       }
       else {
-        combinedRecord.set(record.finishedDate.toString(), record.finishedUnits.valueOf());
+        combinedRecord.set(record.finishedDate, record.finishedUnits.valueOf());
       }
     }
 
     let result = new Array();
 
-    combinedRecord.forEach((value: number, key: string) => {
+    combinedRecord.forEach((value: number, key: Date) => {
       let combinedRecord = { date: key, count: value };
       result.push(combinedRecord);
     });
+    result.sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0)
+    console.log(result);
     return result;
   }
 

@@ -2,18 +2,21 @@
     <div class="container">
         <div class="container">
             <div class="row">
-                <div class="col ">
+                <div class="col-md-4">
                     <h1 class="display-4">{{ goal?.goalName }}</h1>
+                    <p class="lead">Goal: {{goal?.goalNumber}} {{goal?.goalUnit}}</p>
                     <p class="lead">Tag: {{goal?.tag}}</p>
-                    <p class="lead">StartDate: {{goal?.startDate | date: 'shortDate'}}</p>
-                    <p class="lead">DueDate: {{goal?.dueDate | date: 'shortDate'}}</p>
+                    <p class="lead">StartDate: {{goal?.startDate | date: 'shortDate': 'UTC'}}</p>
+                    <p class="lead">DueDate: {{goal?.dueDate | date: 'shortDate': 'UTC'}}</p>
+                    
                     <!--progress bar -->
                     <div class="progress">
-                        <div class="progress-bar progress-bar-animated" [style.width]='finishedPercentage'
+                        <div style="background-color: #b2c2bf !important;"class="progress-bar progress-bar-animated" [style.width]='finishedPercentage'
                             attr.aria-valuenow=0 aria-valuemin=0 attr.aria-valuemax={{goal?.goalNumber}}>
                             {{finishedPercentage}}
                         </div>
                     </div>
+                    
                     <br>
                     <!-- delete goal/ edit goal buttons-->
                     <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
@@ -23,10 +26,6 @@
                     <button type="button" class="btn btn-outline-danger" data-toggle="modal"
                         attr.data-target="#deleteModal_{{goal?._id}}">
                         Delete Goal
-                    </button>
-                    <button type="button" class="btn btn-outline-warning" data-toggle="modal"
-                        attr.data-target="#addRecordModal_{{goal?._id}}">
-                        Add Record
                     </button>
                 </div>
                 <div class="col">
@@ -45,9 +44,19 @@
     </div>
 </div>
 
-<!-- show record table-->
-<app-record [records]="records" (deleteRecordClicked)="ngOnInit()" (updatRecordClicked)="ngOnInit()">
-</app-record>
+<div class="container">
+    <div>
+        <h4>RECORDS</h4>
+        <button type="button" class="btn btn-outline-secondary" data-toggle="modal"
+            attr.data-target="#addRecordModal_{{goal?._id}}">
+            Add Record
+        </button>
+    </div>
+
+    <!-- show record table-->
+    <app-record [records]="records" (deleteRecordClicked)="ngOnInit()" (updatRecordClicked)="ngOnInit()">
+    </app-record>
+</div>
 
 <!-- Delete Goal Modal -->
 <div class="modal fade" id="deleteModal_{{goal?._id}}" tabindex="-1" role="dialog"
