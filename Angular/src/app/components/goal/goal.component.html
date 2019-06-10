@@ -6,7 +6,7 @@
             <!--if not completed and not overdue-->
             <p *ngIf="100 > finishedPercentage && !overDue">{{daysLeft}} days left!</p>
             <!--if not complted and overdue-->
-            <p *ngIf="overDue && 100 > finishedPercentage">Overdue &#9888;</p>
+            <!--<p *ngIf="overDue && 100 > finishedPercentage">Overdue &#9888;</p>-->
             <!--if completed-->
             <p *ngIf="finishedPercentage >= 100"> Completed &#9989;</p>
         </div>

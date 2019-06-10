@@ -5,6 +5,8 @@ import {RegisterController} from "../controllers/registerController";
 import {LoginController} from "../controllers/loginController";
 import GooglePassportObj from '../GooglePassport';
 
+import { Request, Response } from 'express';
+
 
 let passport = require('passport');
 
@@ -20,9 +22,42 @@ class Routes {
         if (req.isAuthenticated()) { console.log("user is authenticated"); return next(); }
         console.log("user is not authenticated");
         res.redirect('/');
-      }
+      } 
+
+    private checkSignIn(req, res, next):void {
+        /*
+        if(req.session.user){
+           next();     //If session exists, proceed to page
+        } else {
+           var err = new Error("Not logged in!");
+           console.log(req.session.user);
+           next(err);  //Error, trying to access unauthorized page!
+        }
+        */
+
+       passport.authenticate('google',
+       {scope:['https://www.googleapis.com/auth/plus.login', 'email'] });
+     }
+
+     private logIn(req, res, next):void {
+         console.log('set session.user to khanh now');
+        req.session.user = 1;
+        res.redirect('/goals');
+        
+     }
+
+     private logOut(req, res, next):void {
+       req.session.user = null;
+       res.redirect('/');
+       
+    }
 
     public routes(app): void {
+
+        app.route('/testLogin')
+            .get(this.logIn);
+        app.route('/testLogout')
+            .get(this.logOut);
 
         app.route('/')
             .get(this.goalController.test)
@@ -37,7 +72,8 @@ class Routes {
             {successRedirect:'/goals',failureRedirect:'/'}))
 
         app.route('/goals')
-            .get(this.goalController.getGoals)
+            .get(passport.authenticate('google',
+            {scope:['https://www.googleapis.com/auth/plus.login', 'email'] }), this.goalController.getGoals)
 
         app.route('/goals/tag/:tag')    
             .get(this.goalController.getGoalsWithTag)
