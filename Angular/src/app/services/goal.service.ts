@@ -20,7 +20,7 @@ export class GoalService {
   constructor(private http: HttpClient) { }
 
   getGoals(): Observable<Goal[]> {
-    return this.http.get<Goal[]>(this.getGoalsUrl);
+    return this.http.get<Goal[]>(this.getGoalsUrl, { withCredentials: true });
   }
 
   addGoal(goal: Goal): Observable<Goal> {

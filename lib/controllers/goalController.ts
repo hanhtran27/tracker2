@@ -24,7 +24,9 @@ export class GoalController {
         console.log("new goal created: " + req.body.goalName);
     }
 
-    public getGoals(req: Request, res: Response) {
+    public getGoals(req, res) {
+
+        console.log("user is: " + req.user);
         Goal.find({}, (err, goal) => {
             if (err) {
                 res.send(err);
