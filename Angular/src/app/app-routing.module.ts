@@ -10,6 +10,7 @@ import { GoalComponent } from './components/goal/goal.component';
 import { GoalDetailsComponent } from './components/goal-details/goal-details.component';
 
 const routes: Routes = [
+  {path:'#/list/', component: AboutComponent}, //fixme
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
@@ -19,7 +20,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes,{useHash:true})],
   exports: [RouterModule]
 })
+
+// export const routing = RouterModule.forRoot(routes, {useHash:true});
+
 export class AppRoutingModule { }

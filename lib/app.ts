@@ -3,8 +3,9 @@ import * as bodyParser from "body-parser";
 import * as mongoose from "mongoose";
 import { Routes } from "./routes/routes";
 import * as cors from "cors";
+import * as session from 'express-session';
 
-
+let passport = require('passport');
 class App {
     //install express
     public app: express.Application;
@@ -23,6 +24,12 @@ class App {
         //support application/x-www-form-urlencoded post data
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(cors());
+
+        // this.app.use('/', express.static(__dirname+'/dist'));
+        this.app.use(session({ secret: 'keyboard cat' }));
+        this.app.use(passport.initialize()); 
+        this.app.use(passport.session())  // persisten login session
+
     }
 
     

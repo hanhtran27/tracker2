@@ -9,5 +9,6 @@ export const GoalSchema = new Schema({
   goalNumber:{type:Number},
   goalUnit:{type:String},
   startDate:{type:Date},
-  dueDate:{type:Date}
+  dueDate:{type:Date},
+  // owner:{type:String}  
 });

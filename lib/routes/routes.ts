@@ -3,7 +3,10 @@ import { UserController } from "../controllers/userController";
 import { RecordController } from "../controllers/recordController";
 import {RegisterController} from "../controllers/registerController";
 import {LoginController} from "../controllers/loginController";
+import GooglePassportObj from '../GooglePassport';
 
+
+let passport = require('passport');
 
 class Routes {
     public goalController: GoalController = new GoalController();
@@ -11,25 +14,36 @@ class Routes {
     public recordController: RecordController = new RecordController();
     public registerController: RegisterController = new RegisterController();
     public loginController: LoginController = new LoginController();
+    public googlePassportObj:GooglePassportObj = new GooglePassportObj();
     
+    private validateAuth(req, res, next):void {
+        if (req.isAuthenticated()) { console.log("user is authenticated"); return next(); }
+        console.log("user is not authenticated");
+        res.redirect('/');
+      }
+
     public routes(app): void {
 
-        //GOALS
         app.route('/')
             .get(this.goalController.test)
         
+        app.route('/auth/google')
+            .get(passport.authenticate('google',
+            {scope:['https://www.googleapis.com/auth/plus.login', 'email'] }))
+        
+        app.route('/auth/google/callback')
+            .get(passport.authenticate('google',
+            // redirect to goals if succeed, otherwise, created 
+            {successRedirect:'/goals',failureRedirect:'/'}))
 
         app.route('/goals')
-            //get all goals
             .get(this.goalController.getGoals)
 
-        app.route('/goals/tag/:tag')    //fixme: should have user id 
-            //get goals with same tag
+        app.route('/goals/tag/:tag')    
             .get(this.goalController.getGoalsWithTag)
 
-        // /goals?userId="agdsgdaf"
+        // goals?userId="agdsgdaf"
         app.route('/goals/user/:userId')
-            //get goals of a same user
             .get(this.goalController.getGoalsWithUserId)
 
         //create a goal
@@ -37,48 +51,33 @@ class Routes {
             .post(this.goalController.addNewGoal)
 
         app.route('/goal/:goalId')
-            //get specific goal
             .get(this.goalController.getGoalWithId)
-            // Update a goal  
             .put(this.goalController.updateGoal)
-            // Delete a goal 
             .delete(this.goalController.deleteGoal)
 
 
         //USERS
-
         app.route('/users')
-            //get all users
             .get(this.userController.getUsers)
 
         app.route('/user')
-            //create a user
             .post(this.userController.addNewUser)
 
         app.route('/user/:userId')
-            //get specific user
             .get(this.userController.getUserWithId)
-            // Update a user
             .put(this.userController.updateUser)
-            // Delete a user
             .delete(this.userController.deleteUser)
 
-        //Records 
 
-        //create a record
         app.route('/record')
             .post(this.recordController.addNewRecord)
         
-        //get all records
         app.route('/records')
             .get(this.recordController.getRecords)
 
         app.route('/record/:recordId')
-            //get specific record
             .get(this.recordController.getRecordWithId)
-            //Update a record
             .put(this.recordController.updateRecord)
-            // Delete a record
             .delete(this.recordController.deleteRecord)
 
         //get records of a same goal

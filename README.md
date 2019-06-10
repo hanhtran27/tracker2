@@ -48,23 +48,6 @@ mocha
 Azure Instruciton 
 
 
+
 Trello URL: 
 https://trello.com/b/saJnIaud/user-stories
-
-
-Feedback Incorporated:
-**Project Review #1**
-- Powerpoint was used for later presentation
-- Due date is included in Goal Schema
-- Resolved concerns about implementation
-- "Tag" property is included in Goal Schema to separate goals
-- Goals are divided into three categories: finished and due, not finish and due, and not finish and not due; with different color presenting to users.
-
-**User Stories**
-- User Stories seperated into Sprint 1, 2, 3, and 4 
-- Trello is labeled 
-
-**Project Review #2**
-- Backend file was seperated to controllers, models, routes, tests
-- Typescript is used for implementation
-- User model and Record model were added, instead of having only one model
