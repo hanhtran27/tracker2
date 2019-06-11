@@ -7,6 +7,7 @@ import { RecordService } from '../../services/record.service';
 // bar chart imports
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
+import { HttpResponse } from '@angular/common/http';
 
 
 
@@ -54,31 +55,35 @@ export class GoalDetailsComponent implements OnInit {
   getGoal(): void {
     const goalId = this.route.snapshot.paramMap.get('id');
     this.goalService.getGoalById(goalId)
-      .subscribe(goal => this.getGoalCallBack(goal));
+      .subscribe(response => this.getGoalCallBack(response));
   }
 
-  getGoalCallBack(goal: Goal): void {
-    this.goal = goal;
-    this.getRecordsByGoalId(goal._id)
+  getGoalCallBack(response: HttpResponse<Goal>): void {
+    if (response.status === 200) {
+      this.goal = response.body;
+      this.getRecordsByGoalId(this.goal._id);
+    }
   }
 
   getRecordsByGoalId(goalId: string): void {
     this.recordService
       .getRecordsByGoalId(goalId)
-      .subscribe(records => this.getRecordsByGoalIdCallback(records));
+      .subscribe(response => this.getRecordsByGoalIdCallback(response));
   }
 
-  getRecordsByGoalIdCallback(records: Record[]): void {
-    this.calculateFinishedPercentage(this.goal, records)
+  getRecordsByGoalIdCallback(response: HttpResponse<Record[]>): void {
 
-    let combined = this.comebineRecord(records);
-    this.barChartLabels = combined.map(a => a.date.toString().split("T")[0]);
+    if (response.status === 200) {
+      this.calculateFinishedPercentage(this.goal, response.body)
+      let combined = this.comebineRecord(response.body);
+      this.barChartLabels = combined.map(a => a.date.toString().split("T")[0]);
 
-    let data1 = combined.map(a => a.count);
-    this.barChartData =
-      [
-        { data: data1, label: this.goal.goalUnit, backgroundColor: "#3b3a30", borderColor: "#3b3a30", hoverBackgroundColor:"#3b3a30" }
-      ];
+      let data1 = combined.map(a => a.count);
+      this.barChartData =
+        [
+          { data: data1, label: this.goal.goalUnit, backgroundColor: "#3b3a30", borderColor: "#3b3a30", hoverBackgroundColor:"#3b3a30" }
+        ];
+    }
   }
 
   calculateFinishedPercentage(goal: Goal, records: Record[]): void {

@@ -4,10 +4,6 @@ import { RecordController } from "../controllers/recordController";
 import {RegisterController} from "../controllers/registerController";
 import {LoginController} from "../controllers/loginController";
 import GooglePassportObj from '../GooglePassport';
-
-import { Request, Response } from 'express';
-
-
 let passport = require('passport');
 
 class Routes {
@@ -18,67 +14,66 @@ class Routes {
     public loginController: LoginController = new LoginController();
     public googlePassportObj:GooglePassportObj = new GooglePassportObj();
     
-    private validateAuth(req, res, next):void {
-        if (req.isAuthenticated()) { console.log("user is authenticated"); return next(); }
-        console.log("user is not authenticated");
-        res.redirect('/');
-      } 
+    // function to check if user is logged in. This function is called before any
+    // path handler is called.
+    private checkIfLoggedIn(req, res, next):void {
 
-    private checkSignIn(req, res, next):void {
-        /*
-        if(req.session.user){
-           next();     //If session exists, proceed to page
-        } else {
-           var err = new Error("Not logged in!");
-           console.log(req.session.user);
-           next(err);  //Error, trying to access unauthorized page!
+        // always allow the log in,logout and the callback path
+        if (req.path == "/auth/google" 
+        || req.path == '/auth/google/callback'
+        || req.path == '/auth/logout') {
+            // call the next path handler
+            return next();
         }
-        */
 
-       passport.authenticate('google',
-       {scope:['https://www.googleapis.com/auth/plus.login', 'email'] });
-     }
-
-     private logIn(req, res, next):void {
-         console.log('set session.user to khanh now');
-        req.session.user = 1;
-        res.redirect('/goals');
-        
-     }
+        // return an error without continuing to next path handler
+        if (!req.user) {
+          res.status(401).send("Unauthorized");
+          return;
+        }
+        next();
+    }
 
      private logOut(req, res, next):void {
-       req.session.user = null;
-       res.redirect('/');
-       
+
+        // no logout if not yet log in
+        if (!req.user) {
+            res.redirect('http://localhost:4200/#/login');
+            return;
+        }
+        // clear session to log out
+        let userController = new UserController();
+        userController.removeUser(req.user.googleId);
+        req.logout();
+        res.redirect('http://localhost:4200/#/login');
     }
 
     public routes(app): void {
 
-        app.route('/testLogin')
-            .get(this.logIn);
-        app.route('/testLogout')
-            .get(this.logOut);
+        // apply this function to all incoming requests(paths)
+        app.use(this.checkIfLoggedIn);
 
-        app.route('/')
-            .get(this.goalController.test)
-        
+        // this path redirect the user to Google to sign in
         app.route('/auth/google')
             .get(passport.authenticate('google',
-            {scope:['https://www.googleapis.com/auth/plus.login', 'email'] }))
+            {scope:['https://www.googleapis.com/auth/plus.login', 'email'] }));
         
+        // Once signed in, Google will call this path. Just redirect user back to the angular app
         app.route('/auth/google/callback')
-            .get(passport.authenticate('google',
-            // redirect to goals if succeed, otherwise, created 
-            {successRedirect:'/goals',failureRedirect:'/'}))
+            .get(passport.authenticate('google'),(req, res) => {
+                res.redirect('http://localhost:4200/#/login');
+            });
+
+        // log out
+        app.route('/auth/logout')
+            .get(this.logOut);
 
         app.route('/goals')
-            .get(passport.authenticate('google',
-            {scope:['https://www.googleapis.com/auth/plus.login', 'email'] }), this.goalController.getGoals)
+            .get(this.goalController.getGoals);
 
         app.route('/goals/tag/:tag')    
             .get(this.goalController.getGoalsWithTag)
 
-        // goals?userId="agdsgdaf"
         app.route('/goals/user/:userId')
             .get(this.goalController.getGoalsWithUserId)
 

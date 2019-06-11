@@ -3,6 +3,7 @@ import { Md5 } from 'ts-md5/dist/md5';
 import {HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
+import { HttpResponse } from '@angular/common/http';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -19,6 +20,11 @@ export class UserService {
 
   constructor(private http:HttpClient) { }
 
+  getUser():Observable<HttpResponse<User>> {
+    return this.http.get<User>(this.loginUrl, {observe: 'response', withCredentials: true });
+  }
+
+  // unused below, delete later
   checklogin(email:string, password:string):Observable<any> {
     //convert password to hash
     let hash_l = Md5.hashStr(password);

@@ -21,7 +21,18 @@ export class LoginComponent implements OnInit {
     this.invisible = "invisible";
   }
 
-  login() {
+  login(): void {
+    // redirect to node login api when clicking login button:
+    window.location.href = 'http://localhost:8080/auth/google';
+  }
+
+  logout(): void {
+    // redirect to node logout api when clicking login button:
+    window.location.href = 'http://localhost:8080/auth/logout';
+  }
+
+  //delete later! not used
+  login1() {
     this.userService
         .checklogin(this.email, this.password)
         .subscribe((res:any) => {
