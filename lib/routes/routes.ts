@@ -38,14 +38,14 @@ class Routes {
 
         // no logout if not yet log in
         if (!req.user) {
-            res.redirect('http://localhost:4200/#/login');
+            res.redirect('http://localhost:8080/#/login');
             return;
         }
         // clear session to log out
         let userController = new UserController();
         userController.removeUser(req.user.googleId);
         req.logout();
-        res.redirect('http://localhost:4200/#/login');
+        res.redirect('http://localhost:8080/#/login');
     }
 
     public routes(app): void {
@@ -61,7 +61,8 @@ class Routes {
         // Once signed in, Google will call this path. Just redirect user back to the angular app
         app.route('/auth/google/callback')
             .get(passport.authenticate('google'),(req, res) => {
-                res.redirect('http://localhost:4200/#/login');
+
+                res.redirect('http://localhost:8080/#/login');
             });
 
         // log out

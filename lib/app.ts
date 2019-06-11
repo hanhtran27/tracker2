@@ -24,9 +24,10 @@ class App {
         this.app.use(bodyParser.urlencoded({ extended: false }));
         //this.app.use(cors());
 
-        this.app.use(cors({credentials: true, origin: 'http://localhost:4200'}));
+        
+        this.app.use(cors({credentials: true, origin: 'http://localhost:8080'}));
 
-        // this.app.use('/', express.static(__dirname+'/dist'));
+        this.app.use('/', express.static(__dirname+'/dist'));
         this.app.use(session({ secret: 'keyboard cat' }));
         this.app.use(passport.initialize()); 
         this.app.use(passport.session())  // persisten login session
