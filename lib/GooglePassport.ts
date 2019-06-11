@@ -1,42 +1,30 @@
 import googleAppAuth from './googleOauth2';
-
 import { UserController } from "./controllers/userController";
-
 let passport = require('passport');
 let GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 // Creates a Passport configuration for Google
 class GooglePassport {
 
-    userId: string;
-    displayName: string;
-    email: string;
-    clientId: string;
-    secretId: string;
-    
-    lookupUser(id, done):void {
-        console.log("DEserialize now ID: " + id);
+  lookupUser(id, done):void {
         let userController = new UserController();
         userController.getUser(id, done);
     }
 
     constructor() {
-        this.clientId = googleAppAuth.id;
-        this.secretId = googleAppAuth.secret;
         passport.use(new GoogleStrategy({
-                clientID: this.clientId,
-                clientSecret: this.secretId,
+                clientID: googleAppAuth.id,
+                clientSecret: googleAppAuth.secret,
                 callbackURL: "/auth/google/callback",   // 
                 profileFields: ['id', 'displayName', 'emails']
             },
             (accessToken, refreshToken, profile, done) => {
                 process.nextTick( () => {
-                    //console.log('validating google profile:' + JSON.stringify(profile));
-                    this.userId = profile.id;
-                    this.displayName = profile.displayName;
-                    this.email = profile.emails[0].value;
-                    console.log("get new google user, enter db now:");
-
+                    console.log('validating google profile:' + JSON.stringify(profile));
+                    
+                    // When google sends us a user profile here, store it in Mongo User table so that we can look up the
+                    // profile for next user's requests, and dont' need to ask user to sign in with google
+                    // all the time. When user logout, delete the entry in User table.
                     let userController = new UserController();
                     userController.addUser(profile.emails[0].value, profile.displayName, profile.id);
                      
@@ -45,11 +33,12 @@ class GooglePassport {
             }
         ));
 
+        // store user googleId in client browser
         passport.serializeUser(function(user, done) {
-            console.log("serialize now");
             done(null, user.id);
         });
 
+        // when client send any request with email in the header, search in Mongo User table
         passport.deserializeUser(this.lookupUser);
     }
 }

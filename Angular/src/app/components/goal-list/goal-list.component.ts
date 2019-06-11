@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Goal } from '../../models/goal.model';
 import { GoalService } from '../../services/goal.service';
+import { UserService } from '../../services/user.service';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-goal-list',
@@ -10,16 +12,26 @@ import { GoalService } from '../../services/goal.service';
 export class GoalListComponent implements OnInit {
 
   goals: Goal[];
+  loggedIn: boolean;
 
   // inject goalService
-  constructor(private goalService: GoalService) { }
-  
+  constructor(private goalService: GoalService) {
+    this.loggedIn = false;
+  }
+
   ngOnInit() {
     // call goal service to get all goals
     this.goalService.getGoals()
-      .subscribe(goalsResult => this.goals = goalsResult);
+      .subscribe(goalsResult => this.processServerResponse(goalsResult));
   }
 
+  processServerResponse(result) {
+    if (result.status === 200) {
+      this.goals = result.body;
+      this.loggedIn = true;
+    }
+
+  }
   // add a new goal
   addGoal(goalName: HTMLInputElement,
     tag: HTMLInputElement,
@@ -34,14 +46,14 @@ export class GoalListComponent implements OnInit {
 
     //add goal
     this.goalService.addGoal(newGoal)
-      .subscribe(goalResult => this.goals.push(goalResult));
+      .subscribe(goalResult => this.goals.push(goalResult.body));
 
     goalName.value = "";
     tag.value = "";
     goalNumber.value = "";
     goalUnit.value = "";
-    startDate.valueAsDate = "";
-    dueDate.valueAsDate = "";
+    startDate.value = "";
+    dueDate.value = "";
   }
 
 

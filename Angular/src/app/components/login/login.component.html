@@ -1,41 +1,25 @@
-
-<div class="container-fluid">
+<div class="text-center">
+  <h1>WELCOME TO GOAL TRACKER</h1>
+</div>
+<div class="container">
   <div class="row">
-    <div class="offset-md-5 column-md-4">
-      <h1> Login</h1>
-      <hr>
-
-      <!--Create login form-->
-      <form (ngSubmit)=login()>
-
-        <div class="form-group">
-          <label for="">Email</label>
-          <input type="text" class="form-control" [(ngModel)]="email" name=email required>
-        </div>
-
-        <div class="form-group">
-          <label for="">Password</label>
-          <input type="password" class="form-control" [(ngModel)]="password" name="password" required>
-        </div>
-
-        <div class="loginButton">
-          <input type="submit" class="btn btn-primary" value="Submit">
-        </div>
-      </form>
-
-      <div class="alert alert-danger {{invisible}}">
-        <strong>Invalid Login! Try again.</strong>
-      </div>
-
-      <div class="media">
-        <p> Don't have an account?  </p>
-        <!-- direct to Register page-->
-        <a routerLink="/register">Register</a>                
-      </div>
-
+    <div class="col">
+      <img src="assets/images/working.jpg" style="margin-top: 20px;">
     </div>
-
+    <div class="col">
+      <h2 style="margin-top: 100px;" class="font-weight-light">Track and mine the best out of your goals</h2>
+      <p>"A dream without a plan is just a wish"</p>
+      <div class="text-center">
+        <button (click)="login()" type="button" class="btn btn-dark">
+          log in with Google
+        </button>
+      </div>
+      <br>
+      <div class="text-center">
+        <button (click)="logout()" type="button" class="btn btn-dark">
+          log out
+        </button>
+      </div>
+    </div>
   </div>
 </div>
-
-

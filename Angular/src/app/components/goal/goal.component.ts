@@ -39,7 +39,14 @@ export class GoalComponent implements OnInit {
   getRecodsByGoalId(goalId: string): void {
     this.recordService
       .getRecordsByGoalId(goalId)
-      .subscribe(records => this.calculateFinishedPercentage(this.goal, records));
+      .subscribe(records => this.processServerResponse(records));
+  }
+
+  processServerResponse(result) {
+    if (result.status === 200) {
+      this.calculateFinishedPercentage(this.goal, result.body);
+    }
+
   }
 
   calculateFinishedPercentage(goal: Goal, records: Record[]): void {

@@ -10,7 +10,7 @@ import { GoalComponent } from './components/goal/goal.component';
 import { GoalDetailsComponent } from './components/goal-details/goal-details.component';
 
 const routes: Routes = [
-  {path:'#/list/', component: AboutComponent}, //fixme
+  {path: '#/list/', component: AboutComponent}, //fixme
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},

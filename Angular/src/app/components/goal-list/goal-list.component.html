@@ -60,12 +60,14 @@
 </div>
 
 <div class="container">
-    <h1>My Goals</h1>
 
-    <!-- Button trigger create goal popup -->
-    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#createGoalModal">
+    <h1>My Goals</h1>
+    
+    <!-- Button trigger create goal popup. Only show if logged in -->
+    <button *ngIf="loggedIn" type="button" class="btn btn-dark" data-toggle="modal" data-target="#createGoalModal">
         &#43; Create Goal
     </button>
+
     <br>
     <!--list goals-->
     <div *ngFor="let goal of goals" class="col-1-4">

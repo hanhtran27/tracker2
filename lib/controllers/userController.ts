@@ -22,11 +22,21 @@ export class UserController {
     public getUser(id: String, done) {
         User.find({"googleId": id}, (err, user) => {
             if (err) {
-                console.log("ERROR: " + err)
+                console.log("ERROR: Can't track google user " + err)
                 done(null, false);
             }
-            console.log("got user out of db: " + user);
-            done(null, user);
+            console.log("Deserialized user:" + user);
+            done(null, user[0]);
+        });
+    }
+
+    public removeUser(id: String) {
+        User.deleteOne({ "googleId": id }, 
+            (err) => {
+            if(err){
+                console.log("ERROR: can't untrack google user " + err);
+            }
+            console.log("untracked user with id: " + id);
         });
     }
 
@@ -42,12 +52,12 @@ export class UserController {
         });
     }
 
-    public getUsers(req: Request, res: Response) {
-        User.find({}, (err, user) => {
+    public getUsers(req, res: Response) {
+        User.find({"googleId": req.user.googleId}, (err, user) => {
             if(err){
                 res.send(err);
             }
-            res.json(user);
+            res.json(user[0]);
         });
     }
 
